@@ -1,0 +1,26 @@
+﻿@model RunData
+
+@{
+    ViewData["Title"] = "AddToHistory";
+}
+
+<h2>AddToHistory</h2>
+
+<form asp-controller="RunHistory" asp-action="AddToHistory" method="post">
+    <div class="label-input">
+        <label asp-for="Distance">Distance</label>
+        <input asp-for="Distance" type="number" min="0" step=".1" />
+    </div>
+    <div class="label-input">
+        <label asp-for="Hours">Hours</label>
+        <input asp-for="Hours" type="number" />
+        <label asp-for="Minutes">Minutes</label>
+        <input asp-for="Minutes" type="number" />
+        <label asp-for="Seconds">Seconds</label>
+        <input asp-for="Seconds" type="number" />
+    </div>
+    <div class="label-input">
+        <input type="submit" value="Add to history" />
+    </div>
+
+</form>

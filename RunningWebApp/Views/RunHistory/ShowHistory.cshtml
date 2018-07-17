@@ -1,0 +1,25 @@
+﻿@model IList<PastRun>
+@{
+    ViewData["Title"] = "View";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Distance</th>
+            <th>Duration</th>
+            <th>Average Pace</th>
+            <th>Post Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PastRun run in @Model)
+        {
+            <tr>
+                <td>@run.Distance miles</td>
+                <td>@run.Hours hours @run.Minutes minutes Model.Seconds seconds</td>
+                <td>@run.AverageMinutes minutes @run.AverageSeconds seconds</td>
+                <td>@run.PostDate</td>
+            </tr>}
+    </tbody>
+</table>
