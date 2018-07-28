@@ -1,0 +1,12 @@
+﻿@model Goal
+
+@{
+    ViewData["Title"] = "GoalResult";
+}
+
+<h2>GoalResult</h2>
+
+<h3 style="padding-top: 25px">Your average pace is @Model.UPerMilePace[0] minutes and @Model.UPerMilePace[1] seconds per mile.</h3>
+
+<h3 style="padding-top: 25px">Your goal pace is @Model.GPerMilePace[0] minutes and @Model.GPerMilePace[1] seconds per mile.</h3>
+

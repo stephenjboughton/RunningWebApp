@@ -32,6 +32,9 @@ namespace RunningWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+			services.AddDistributedMemoryCache();
+			services.AddSession();
+
 			services.AddTransient<IRunningAppDAL>(d => new RunHistoryDAL(@"Data Source=.\SQLEXPRESS;Initial Catalog=RunningAppDB;Integrated Security=True"));
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -54,7 +57,9 @@ namespace RunningWebApp
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
+			app.UseSession();
+
+			app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
