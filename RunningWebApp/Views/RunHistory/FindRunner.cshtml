@@ -1,0 +1,18 @@
+﻿@model RunData;
+@{
+    ViewData["Title"] = "FindRunner";
+}
+
+<p>Please enter your name below to retrieve your run history:</p>
+
+<form asp-controller="runhistory" asp-action="showhistory" method="get">
+    <div>
+        <label asp-for="FName">First Name</label>
+        <input asp-for="FName" type="text" />
+        <label asp-for="LName">Last Name</label>
+        <input asp-for="LName" type="text" />
+    </div>
+    <div>
+        <input type="submit" value="Get my history" />
+    </div>
+</form>

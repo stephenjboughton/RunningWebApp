@@ -8,29 +8,34 @@ using RunningWebApp.Models;
 
 namespace RunningWebApp.Controllers
 {
-    public class RunHistoryController : Controller
-    {
+	public class RunHistoryController : Controller
+	{
 		private IRunningAppDAL dal;
 		public RunHistoryController(IRunningAppDAL dal)
 		{
 			this.dal = dal;
 		}
 
-		public IActionResult AddToHistory(RunData model)
+		public IActionResult FindRunner()
 		{
-			return View(model);
+			return View();
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult AddToHistory(string fname, string lname, RunData rundata)
+		public IActionResult AddToHistory(RunData runData)
 		{
-			int runnerId = dal.AddToHistory(fname, lname, rundata);
+			int runnerId = dal.AddToHistory(runData);
 			return RedirectToAction("ShowHistory", "RunHistory", new { ID = runnerId });
 		}
 
-		public IActionResult ShowHistory(int ID)
+		public IActionResult ShowHistory(int ID, string fname, string lname)
 		{
+			if (ID == 0)
+			{
+				ID = dal.GetUserID(fname, lname);
+			}
+
 			IList<PastRun> runs = dal.ShowHistory(ID);
 			return View(runs);
 		}

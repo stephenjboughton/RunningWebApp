@@ -35,7 +35,8 @@ namespace RunningWebApp
 			services.AddDistributedMemoryCache();
 			services.AddSession();
 
-			services.AddTransient<IRunningAppDAL>(d => new RunHistoryDAL(@"Data Source=.\SQLEXPRESS;Initial Catalog=RunningAppDB;Integrated Security=True"));
+			string connectionString = Configuration["ConnectionStrings:default"];
+			services.AddTransient<IRunningAppDAL>(d => new RunHistoryDAL(connectionString));
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

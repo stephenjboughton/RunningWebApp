@@ -4,11 +4,12 @@
 
 <h1>Track your runs with this running app!</h1>
 
-<img src="~/images/FUN-RUN.jpg" />
+<img id="home-image" src="~/images/dark-runner.jpg" />
 
-<h2>Choose from one of our great options below</h2>
+<h2>Choose from one of the great options below</h2>
 
-<ul>
+<ul id="home-options">
     <li><a asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a></li>
-    <li><a asp-action="GoalEntry" asp-controller="Goals">Goal Setter</a></li>
+    <li><a asp-action="GoalEntry" asp-controller="Goals">Goal Runs</a></li>
+    <li><a asp-action="FindRunner" asp-controller="RunHistory">Your Run History</a></li>
 </ul>

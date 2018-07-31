@@ -87,6 +87,14 @@ namespace RunningWebApp.Models
 			}
 		}
 
+		public int[] UTimeToCut
+		{
+			get
+			{
+				return TimeToCut(UAverageSeconds, GAverageSeconds);
+			}
+		}
+
 		public int[] PerMilePace(int averageSeconds)
 		{
 			int minutesPerMile = averageSeconds / secondsPerMinute;
@@ -94,6 +102,16 @@ namespace RunningWebApp.Models
 			int[] AverageMileTime = new int[]
 				{ minutesPerMile, extraSecondsPerMile };
 			return AverageMileTime;
+		}
+
+		public int[] TimeToCut(int userAvg, int goalAvg)
+		{
+			int difference = userAvg - goalAvg;
+			int minutesToCut = difference / secondsPerMinute;
+			int secondsToCut = difference % secondsPerMinute;
+			int[] PerMileTimeToCut = new int[]
+				{ minutesToCut, secondsToCut };
+			return PerMileTimeToCut;
 		}
 	}
 }

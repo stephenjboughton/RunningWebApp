@@ -3,7 +3,7 @@
     ViewData["Title"] = "View";
 }
 
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Distance</th>
@@ -17,7 +17,7 @@
         {
             <tr>
                 <td>@run.Distance miles</td>
-                <td>@run.Hours hours @run.Minutes minutes Model.Seconds seconds</td>
+                <td>@run.Hours hours @run.Minutes minutes @run.Seconds seconds</td>
                 <td>@run.AverageMinutes minutes @run.AverageSeconds seconds</td>
                 <td>@run.PostDate</td>
             </tr>}

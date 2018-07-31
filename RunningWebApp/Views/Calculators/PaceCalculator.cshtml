@@ -9,18 +9,24 @@
 
 <form asp-controller="Calculators" asp-action="PaceCalculatorResult" method="get">
     <div class="label-input">
-        <label asp-for="Distance">Please enter the distance you ran in miles</label>
+        <label asp-for="Distance">Please enter the distance you ran in miles:</label>
         <input asp-for="Distance" type="number" min="0" step=".1" />
     </div>
     <p>Enter the time it took you to run this distance in the fields below:</p>
-    <div class="label-input">
-        <label asp-for="Hours">Hours</label>
-        <input asp-for="Hours" type="number" />
-        <label asp-for="Minutes">Minutes</label>
-        <input asp-for="Minutes" type="number" />
-        <label asp-for="Seconds">Seconds</label>
-        <input asp-for="Seconds" type="number" />
-    </div>
+    
+        <div class="label-input">
+            <label asp-for="Hours">Hours</label>
+            <input asp-for="Hours" type="number" />
+        </div>
+        <div class="label-input">
+            <label asp-for="Minutes">Minutes</label>
+            <input asp-for="Minutes" type="number" />
+        </div>
+        <div class="label-input">
+            <label asp-for="Seconds">Seconds</label>
+            <input asp-for="Seconds" type="number" />
+        </div>
+    
     <div class="label-input">
         <input type="submit" value="Calculate Pace" />
     </div>

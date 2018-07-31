@@ -8,8 +8,10 @@ namespace RunningWebApp.DAL
 {
     public interface IRunningAppDAL
     {
-		int AddToHistory(string fname, string lname, RunData rundata);
+		int AddToHistory(RunData rundata);
 
 		IList<PastRun> ShowHistory(int runnerId);
+
+		int GetUserID(string fname, string lname);
     }
 }
