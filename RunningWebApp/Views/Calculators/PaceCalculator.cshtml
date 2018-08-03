@@ -8,27 +8,31 @@
 <p>You can use this pace calculator to determine the average pace you were running at during your latest run.</p>
 
 <form asp-controller="Calculators" asp-action="PaceCalculatorResult" method="get">
-    <div class="label-input">
-        <label asp-for="Distance">Please enter the distance you ran in miles:</label>
+    <div class="label-input pace-field">
+        <label asp-for="Distance">Distance in miles</label>
         <input asp-for="Distance" type="number" min="0" step=".1" />
     </div>
     <p>Enter the time it took you to run this distance in the fields below:</p>
-    
-        <div class="label-input">
-            <label asp-for="Hours">Hours</label>
-            <input asp-for="Hours" type="number" />
-        </div>
-        <div class="label-input">
-            <label asp-for="Minutes">Minutes</label>
-            <input asp-for="Minutes" type="number" />
-        </div>
-        <div class="label-input">
-            <label asp-for="Seconds">Seconds</label>
-            <input asp-for="Seconds" type="number" />
-        </div>
-    
+
+    <div class="label-input pace-field">
+        <label asp-for="Hours">Hours</label>
+        <input asp-for="Hours" type="number" />
+    </div>
+    <div class="label-input pace-field">
+        <label asp-for="Minutes">Minutes</label>
+        <input asp-for="Minutes" type="number" />
+    </div>
+    <div class="label-input pace-field">
+        <label asp-for="Seconds">Seconds</label>
+        <input asp-for="Seconds" type="number" />
+    </div>
+
     <div class="label-input">
         <input type="submit" value="Calculate Pace" />
     </div>
-
 </form>
+<div class="return">
+    <ul id="home-options">
+        <li><a asp-action="Index" asp-controller="Home">Return to main page</a></li>
+    </ul>
+</div>

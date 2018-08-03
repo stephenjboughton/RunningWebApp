@@ -1,15 +1,21 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<div id="home">
+    <header>
+        <h1>Welcome to RunTlme!</h1>
+        <h4>Find out what your average pace is and keep track of the times and distances of all your runs with Runtlme.</h4>
 
-<h1>Track your runs with this running app!</h1>
+        <img id="home-image" src="~/images/dark-runner.jpg" />
+    </header>
+    <main id="content">
+        <h2>Choose from one of the options below</h2>
 
-<img id="home-image" src="~/images/dark-runner.jpg" />
-
-<h2>Choose from one of the great options below</h2>
-
-<ul id="home-options">
-    <li><a asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a></li>
-    <li><a asp-action="GoalEntry" asp-controller="Goals">Goal Runs</a></li>
-    <li><a asp-action="FindRunner" asp-controller="RunHistory">Your Run History</a></li>
-</ul>
+        <ul id="home-options">
+            <li><a asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a></li>
+            <li><a asp-action="GoalEntry" asp-controller="Goals">Goal Runs</a></li>
+            <li><a asp-action="FindRunner" asp-controller="RunHistory">Your Run History</a></li>
+        </ul>
+    </main>
+    
+</div>

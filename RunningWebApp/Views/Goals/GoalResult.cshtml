@@ -11,7 +11,7 @@
 <h3 style="padding-top: 25px">Your goal pace is @Model.GPerMilePace[0] minutes and @Model.GPerMilePace[1] seconds per mile.</h3>
 
 
-@if(@Model.UTimeToCut[0] > 0)
+@if (@Model.UTimeToCut[0] > 0)
 {
     <h3 style="padding-top: 25px"> You need to cut @Model.UTimeToCut[0] minutes and @Model.UTimeToCut[1] seconds per mile in order to run your goal time for this distance.</h3>
 }
@@ -19,3 +19,8 @@ else
 {
     <h3 style="padding-top: 25px"> You need to cut @Model.UTimeToCut[1] seconds per mile in order to run your goal time for this distance.</h3>
 }
+<div class="return">
+    <ul id="home-options">
+        <li><a asp-action="Index" asp-controller="Home">Return to main page</a></li>
+    </ul>
+</div>
