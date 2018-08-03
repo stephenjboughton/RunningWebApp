@@ -17,7 +17,7 @@ namespace RunningWebApp.DAL
 			this.connectionString = connectionString;
 		}
 
-		public int AddToHistory(string fname, string lname, RunData rundata)
+		public int AddToHistory(RunData rundata)
 		{
 			int runnerId;
 
@@ -29,8 +29,8 @@ namespace RunningWebApp.DAL
 
 					string sqlS = $"SELECT id FROM runner WHERE fname = @fname AND lname = @lname;";
 					SqlCommand cmdS = new SqlCommand(sqlS, conn);
-					cmdS.Parameters.AddWithValue("@fname", fname);
-					cmdS.Parameters.AddWithValue("@lname", lname);
+					cmdS.Parameters.AddWithValue("@fname", rundata.FName);
+					cmdS.Parameters.AddWithValue("@lname", rundata.LName);
 
 					runnerId = Convert.ToInt32(cmdS.ExecuteScalar());
 
@@ -71,7 +71,7 @@ namespace RunningWebApp.DAL
 					while (reader.Read())
 					{
 						PastRun run = new PastRun();
-						run.Distance = Convert.ToInt32(reader["distance"]);
+						run.Distance = Convert.ToDouble(reader["distance"]);
 						run.Hours = run.ConvertTotalSeconds(Convert.ToInt32(reader["total_seconds"]))[0];
 						run.Minutes = run.ConvertTotalSeconds(Convert.ToInt32(reader["total_seconds"]))[1];
 						run.Seconds = run.ConvertTotalSeconds(Convert.ToInt32(reader["total_seconds"]))[2];
@@ -89,6 +89,31 @@ namespace RunningWebApp.DAL
 			}
 
 			return runs;
+		}
+
+		public int GetUserID(string fname, string lname)
+		{
+			int runnerId;
+
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connectionString))
+				{
+					conn.Open();
+
+					string sqlS = $"SELECT id FROM runner WHERE fname = @fname AND lname = @lname;";
+					SqlCommand cmdS = new SqlCommand(sqlS, conn);
+					cmdS.Parameters.AddWithValue("@fname", fname);
+					cmdS.Parameters.AddWithValue("@lname", lname);
+
+					runnerId = Convert.ToInt32(cmdS.ExecuteScalar());
+				}
+			}
+			catch (SqlException ex)
+			{
+				throw;
+			}
+			return runnerId;
 		}
 	}
 }

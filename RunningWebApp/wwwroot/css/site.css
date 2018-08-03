@@ -1,8 +1,11 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
 body {
+    color: white;
     padding-top: 50px;
     padding-bottom: 20px;
+    background: url(../images/dark-metal-texture.jpg);
+    background-size: cover;
 }
 
 /* Wrapping element */
@@ -34,4 +37,123 @@ body {
     .carousel-caption {
         display: none;
     }
+}
+
+#home-options {
+    padding-left: 0;
+    margin-top: 3rem;
+}
+
+    #home-options li {
+        list-style: none;
+        padding: 1rem 0 1rem 0;
+        width: 15rem;
+        background-color: #006e84;
+        margin-right: 2rem;
+        text-align: center;
+        border-radius: 3px;
+    }
+
+    #home-options a {
+        color: aliceblue;
+    }
+
+input[type=number] {
+    color: black;
+}
+
+input[type=text] {
+    color: black;
+}
+
+input[type=submit] {
+    color: black;
+}
+
+select {
+    color: black;
+}
+
+.label-input label {
+    display: block;
+    margin-bottom: .75rem;
+}
+
+    .label-input input[type=number] {
+        width: 15rem;
+        height: 5rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: aqua;
+        border: 2px solid #008eaa;
+        border-radius: 3px;
+        font-size: 3.5rem;
+        text-align: end;
+        padding: 1rem;
+    }
+
+@media only screen and (max-width: 767px) {
+    #home-options li {
+        display: block;
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    #home-image {
+        width: 100%
+    }
+
+    .label-input {
+        display: block;
+        margin: 10px 25px 15px 0;
+    }
+
+    .desktop {
+        display: none;
+    }
+
+    h4 {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    #home-options li {
+        display: inline-block;
+    }
+
+    #home-image {
+        width: 500px;
+    }
+
+    .label-input {
+        display: inline-block;
+        margin: 10px 25px 15px 0;
+    }
+
+    .mobile {
+        display: none;
+    }
+
+    h4 {
+        width: 500px;
+    }
+}
+
+.return {
+    margin-top: 50px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.shine {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #006e84;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #006e84;
 }

@@ -1,0 +1,41 @@
+﻿@model Goal
+
+@{
+    ViewData["Title"] = "GoalEntry";
+}
+
+<h2>What's your goal?</h2>
+<p>You can use this tool to see how close your current time is to your goal time</p>
+
+<form asp-controller="Goals" asp-action="GoalResult" method="get">
+    <div class="goal-field">
+        <label asp-for="Distance">Choose Your Distance</label>
+        <select asp-for="Distance" asp-items="Goal.RaceDistance"></select>
+        <span asp-validation-for="Distance"></span>
+    </div>
+    <p>Enter the time it took you to run this distance in the fields below:</p>
+    <div class="label-input">
+        <label asp-for="UHours">Hours</label>
+        <input asp-for="UHours" type="number" />
+        <label asp-for="UMinutes">Minutes</label>
+        <input asp-for="UMinutes" type="number" />
+        <label asp-for="USeconds">Seconds</label>
+        <input asp-for="USeconds" type="number" />
+    </div>
+    <p>Enter your goal time for running this distance:</p>
+    <div class="label-input">
+        <label asp-for="GHours">Hours</label>
+        <input asp-for="GHours" type="number" />
+        <label asp-for="GMinutes">Minutes</label>
+        <input asp-for="GMinutes" type="number" />
+        <label asp-for="GSeconds">Seconds</label>
+        <input asp-for="GSeconds" type="number" />
+    </div>
+
+    <input type="submit" value="Submit" id="goal-submit" />
+</form>
+<div class="return">
+    <ul id="home-options">
+        <li><a asp-action="Index" asp-controller="Home">Return to main page</a></li>
+    </ul>
+</div>
