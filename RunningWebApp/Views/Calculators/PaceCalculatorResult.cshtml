@@ -9,10 +9,14 @@
 <p>Save this run to your personal run history by filling out your name and clicking below to submit it</p>
 
 <form asp-controller="runhistory" asp-action="addtohistory" method="post">
-    <label asp-for="FName">First Name</label>
-    <input asp-for="FName" type="text" />
-    <label asp-for="LName">Last Name</label>
-    <input asp-for="LName" type="text" />
+
+    @if (ViewBag.KnownUser == false)
+    {
+        <label asp-for="FName">First Name</label>
+        <input asp-for="FName" type="text" />
+        <label asp-for="LName">Last Name</label>
+        <input asp-for="LName" type="text" />
+    }    
     <input type="hidden" asp-for="@Model.Distance" />
     <input type="hidden" asp-for="@Model.Hours" />
     <input type="hidden" asp-for="@Model.Minutes" />

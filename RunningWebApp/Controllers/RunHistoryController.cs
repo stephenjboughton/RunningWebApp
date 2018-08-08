@@ -31,8 +31,21 @@ namespace RunningWebApp.Controllers
 		{
 			/*AddToHistory method in RunHistoryDAL passes in runData instance and uses fname and lname to 
 			 * query the DB and return the runner id for that fname and lname, then sends an executenonquery 
-			 * to insert the instance of runData into the personal history associated with that runner id.*/
-			int runnerId = dal.AddToHistory(runData);
+			 * to insert the instance of runData into the personal history associated with that runner id. 
+			 * If user already has a session, we can use the runnerId stored in session to grab their fname
+			 * and lname and avoid having to have them fill out that form*/
+
+			//get runnerId from session
+			int runnerId = HttpContext.Session.Get<int>(SessionKey);
+
+			//if user didn't have a session already, sessionId will be 0, so take fname and lname from form submit
+			//and use it to get runnerId
+			if (runnerId == 0)
+			{
+				runnerId = dal.GetUserID(runData.FName, runData.LName);
+			}
+			//add the rundata to runner's history using their runnerId
+			dal.AddToHistory(runnerId, runData);
 			//create a new variable that will hold a runner_id and set it
 			int sessionId = HttpContext.Session.Get<int>(SessionKey);
 			//set the sessionID with the runnerId fromm the runData the user inputs
@@ -57,10 +70,6 @@ namespace RunningWebApp.Controllers
 				return RedirectToAction("FindRunner", "RunHistory");
 			}
 
-			//if (ID == 0)
-			//{
-			//	ID = dal.GetUserID(fname, lname);
-			//}
 			else
 			{
 				IList<PastRun> runs = dal.ShowHistory(sessionId);

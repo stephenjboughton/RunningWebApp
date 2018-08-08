@@ -7,8 +7,8 @@ using RunningWebApp.Models;
 namespace RunningWebApp.DAL
 {
     public interface IRunningAppDAL
-    {
-		int AddToHistory(RunData rundata);
+    {		
+		int AddToHistory(int runnerId, RunData rundata);
 
 		IList<PastRun> ShowHistory(int runnerId);
 
