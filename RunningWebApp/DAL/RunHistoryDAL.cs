@@ -17,9 +17,9 @@ namespace RunningWebApp.DAL
 			this.connectionString = connectionString;
 		}
 
-		public int AddToHistory(RunData rundata)
+		public int AddToHistory(int runnerId, RunData rundata)
 		{
-			int runnerId;
+			//int runnerId;
 
 			try
 			{
@@ -27,12 +27,12 @@ namespace RunningWebApp.DAL
 				{
 					conn.Open();
 
-					string sqlS = $"SELECT id FROM runner WHERE fname = @fname AND lname = @lname;";
-					SqlCommand cmdS = new SqlCommand(sqlS, conn);
-					cmdS.Parameters.AddWithValue("@fname", rundata.FName);
-					cmdS.Parameters.AddWithValue("@lname", rundata.LName);
+					//string sqlS = $"SELECT id FROM runner WHERE fname = @fname AND lname = @lname;";
+					//SqlCommand cmdS = new SqlCommand(sqlS, conn);
+					//cmdS.Parameters.AddWithValue("@fname", rundata.FName);
+					//cmdS.Parameters.AddWithValue("@lname", rundata.LName);
 
-					runnerId = Convert.ToInt32(cmdS.ExecuteScalar());
+					//runnerId = Convert.ToInt32(cmdS.ExecuteScalar());
 
 					string sqlI = $"INSERT INTO rundata (runner_id, distance, total_seconds, average_seconds) " +
 							$"VALUES (@runner_id, @distance, @total_seconds, @average_seconds);";
