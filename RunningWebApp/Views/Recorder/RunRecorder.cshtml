@@ -3,5 +3,36 @@
     ViewData["Title"] = "RunRecorder";
 }
 
-<h2>RunRecorder</h2>
+<button id="start" class="recorder-button">Start</button>
+<button id="stop" class="hidden recorder-button">Stop</button>
+<button id="reset" class="hidden recorder-button">Reset</button>
 
+<h1 id="runningTimer" data-time="0">00:00:00</h1>
+
+<h2 id="distanceCovered" data-distance="0"></h2>
+<button id="submit-data" class="hidden submit-button">Caculate Pace</button>
+
+<form class="hidden" asp-controller="Calculators" asp-action="PaceCalculatorResult" method="get">
+    <div class="label-input pace-field">
+        <label asp-for="Distance">Distance in miles</label>
+        <input id="distance-recorded" asp-for="Distance" type="number" min="0" />
+    </div>
+    <div class="label-input pace-field">
+        <label asp-for="Hours">Hours</label>
+        <input id="hours-recorded" asp-for="Hours" type="number" />
+    </div>
+    <div class="label-input pace-field">
+        <label asp-for="Minutes">Minutes</label>
+        <input id="minutes-recorded" asp-for="Minutes" type="number" />
+    </div>
+    <div class="label-input pace-field">
+        <label asp-for="Seconds">Seconds</label>
+        <input id="seconds-recorded" asp-for="Seconds" type="number" />
+    </div>
+
+    <div class="label-input">
+        <input type="submit" value="Calculate Pace" />
+    </div>
+</form>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=geometry"></script>
