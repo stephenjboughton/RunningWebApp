@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Loaded');
     // Locate the try it button
     const Start = document.querySelector('button#start');
-    const CalculatePace = document.querySelector('button#submit-data')
+    const CalculatePace = document.querySelector('button#submit-data');
     // Attach an event handler for a click on the button
     Start.addEventListener('click', (event) => {
         //console.log('Timer button added');    
@@ -54,8 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
         stopTime = Date.now();
         //hide the stop button
         Stop.classList.add('hidden');
+        mapTimeDistanceDisplayToForm();
         //show the start button
         Reset.classList.remove('hidden');
+        //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to calculator action
         CalculatePace.classList.remove('hidden');
 
         console.log(distance);
@@ -72,8 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //locate the calculate pace button and use it to submit a for to calculate pace based on the run recorded
     CalculatePace.addEventListener('click', (event) => {
         console.log('Calculate Button added');
-        //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to calculator action
-        mapTimeDistanceDisplayToForm();
+        
     });
 });
 //declare variable to hold the interval function that calls getLocation every 5s
