@@ -180,3 +180,7 @@ tr:hover {
     border-radius: 3px;
     border-width: 0px;
 }
+
+#distance-covered {
+    margin-bottom: 20px;
+}

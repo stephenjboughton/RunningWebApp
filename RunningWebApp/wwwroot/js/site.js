@@ -1,4 +1,6 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+﻿
+
+// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //declare a variable that returns location every 5s and adds it to the route array
         routeActive = setInterval(getLocation, 5000)
         // run updatetimer every 1s as long as the timer isn't already running (if we click multiple times and don't have this conditional, it will start multiple loops that run every second, creating a bizarre, herky-jerky sped up timer)
-        if (runningTime === undefined) {
+        if (runningTime === undefined || runningTime === null) {
             runningTime = setInterval(updateTimer, 1000);
         }
         //hide start button
@@ -42,9 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
         //unhide stop button
         Stop.classList.remove('hidden');
     });
-    //locate the stop button and add an event listener for a click
+    //variables the locate and hold nodes for stop and reset buttons (both of which are hidden when page loads initially)
     const Stop = document.querySelector('button#stop');
     const Reset = document.querySelector('button#reset');
+    //locate the stop button and add an event listener for a click
     Stop.addEventListener('click', (event) => {
         //stop the repeating interval that adds location to array every 10s
         clearInterval(routeActive);
@@ -54,10 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
         stopTime = Date.now();
         //hide the stop button
         Stop.classList.add('hidden');
+        //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to the pace calculator action
         mapTimeDistanceDisplayToForm();
-        //show the start button
+        //show the reset button
         Reset.classList.remove('hidden');
-        //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to calculator action
+        //show the calculate pace button, which is a form submission button that takes the value-assigned fields in the form and submits them the pace calculator action
         CalculatePace.classList.remove('hidden');
 
         console.log(distance);
@@ -68,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Reset button added');
         clearTimer();
         Reset.classList.add('hidden');
+        CalculatePace.classList.add('hidden');
         Start.classList.remove('hidden');
+
     });
 
     //locate the calculate pace button and use it to submit a for to calculate pace based on the run recorded
@@ -89,13 +95,14 @@ let distance;
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(addWaypoint);
     } else {
         x.innerText = "Geolocation is not supported by this browser.";
     }
 }
 
-function showPosition(position) {
+//function that takes the user's current position and creates a waypoint object which includes properties to hold the lat and long and a timestamp and then adds each waypoint to an array, building the "route" that the user is running
+function addWaypoint(position) {
     let wayPoint = {};
     let time;
     wayPoint.lat = position.coords.latitude;
@@ -103,18 +110,12 @@ function showPosition(position) {
     wayPoint.time = Date.now();
     route.push(wayPoint);
     console.log(route);
-
-    /*let newPosition = getElementFromTemplate('wP');
-     newPosition.querySelector('.demoLat').innerText = wayPoint.lat;
-     newPosition.querySelector('.demoLon').innerText = wayPoint.lon;
-     newPosition.querySelector('.wPTime'). innerText = displayTime(wayPoint.time);
-     document.querySelector('table#routeWP tbody').insertAdjacentElement('afterbegin', newPosition);*/
 }
 
 //variable used to access the timer that is running once we click start
 let runningTime;
 //variable used to access the distance display that lets the user know how far they have gone
-const distanceDisplay = document.querySelector('h2#distanceCovered');
+const distanceDisplay = document.querySelector('h2#distance-covered');
 
 
 // function that locates the running time display, assigns the value of its .time property to the runningTime variable, then updates the display on an interval. this function also updates the distance display and updates it to hold the current distance traveled as caluculated by returnDistance function, which should run every time we add a new waypoint to our route (~ every 5 seconds) (and that value is truncated to two decimal places)
@@ -134,10 +135,12 @@ function clearTimer() {
     runningTimer.dataset.time = 0;
     runningTimer.innerText = "00:00:00";
     distanceDisplay.innerText = "";
-    document.querySelector('table#routeWP tbody').innerHTML = '<template id="wP"><tr><td class="demoLat"></td><td class="demoLon"></td><td class="wPTime"></td></tr></template>';
+    //reset the value of the variable that holds our timer when we call setInterval (clearInterval just stops the execution, does not clear the accumulated value)
+    runningTime = undefined;
+    //document.querySelector('table#routeWP tbody').innerHTML = '<template id="wP"><tr><td class="demoLat"></td><td class="demoLon"></td><td class="wPTime"></td></tr></template>';
 }
 
-//function that assigns the time elements and distance from our run recorder to the appropriate fields of a rundata form which we can submit to our calculator action in order to return a pace
+//function that assigns the time elements and distance from our run recorder to the appropriate fields of a rundata form which we can submit to our pace calculator action in order to return a pace
 function mapTimeDistanceDisplayToForm() {
     const hoursToSubmit = document.querySelector('input#hours-recorded');
     hoursToSubmit.setAttribute("value", calculateHours(runningTimer.dataset.time));
@@ -163,9 +166,11 @@ function returnDistance(route) {
     return runMiles;
 }
 
+const milesPerMeter = 0.00062137;
+
 function convertToMiles(meters) {
     let miles;
-    miles = meters * 0.00062137;
+    miles = meters * milesPerMeter;
     return miles;
 }
 
