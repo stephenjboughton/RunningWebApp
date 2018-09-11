@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //variables the locate and hold nodes for stop and reset buttons (both of which are hidden when page loads initially)
     const Stop = document.querySelector('button#stop');
     const Reset = document.querySelector('button#reset');
+    const Resume = document.querySelector('button#resume')
     //locate the stop button and add an event listener for a click
     Stop.addEventListener('click', (event) => {
         //stop the repeating interval that adds location to array every 10s
@@ -60,12 +61,23 @@ document.addEventListener('DOMContentLoaded', () => {
         //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to the pace calculator action
         mapTimeDistanceDisplayToForm();
         //show the reset button
+        Resume.classList.remove('hidden');
         Reset.classList.remove('hidden');
         //show the calculate pace button, which is a form submission button that takes the value-assigned fields in the form and submits them the pace calculator action
         CalculatePace.classList.remove('hidden');
 
         console.log(distance);
         console.log(displayTime(stopTime - startTime));
+    });
+
+    Resume.addEventListener('click', (event) => {
+        console.log('Resume button used');
+        Resume.classList.add('hidden');
+        Stop.classList.remove('hidden');
+        Reset.classList.add('hidden');
+        CalculatePace.classList.add('hidden');
+        runningTime = setInterval(updateTimer, 1000);
+        routeActive = setInterval(getLocation, 5000)
     });
 
     Reset.addEventListener('click', (event) => {
@@ -77,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    //locate the calculate pace button and use it to submit a for to calculate pace based on the run recorded
+    //locate the calculate pace button and use it to submit a form to calculate pace based on the run recorded
     CalculatePace.addEventListener('click', (event) => {
         console.log('Calculate Button added');
         
@@ -117,6 +129,8 @@ let runningTime;
 //variable used to access the distance display that lets the user know how far they have gone
 const distanceDisplay = document.querySelector('h2#distance-covered');
 
+
+/* WHAT IF WE REDECLARE THE START TIME ANY TIME WE HIT RESUME BUT STORE THE PREVIOUSLY ELAPSED TIME IN AN OFFSET VARIABLE AND ADD THAT TO THE TOTAL TIME AT THE END (OR AT THE TIME WE RESUME)*/
 
 // function that locates the running time display, assigns the value of its .time property to the runningTime variable, then updates the display on an interval. this function also updates the distance display and updates it to hold the current distance traveled as caluculated by returnDistance function, which should run every time we add a new waypoint to our route (~ every 5 seconds) (and that value is truncated to two decimal places)
 function updateTimer() {
