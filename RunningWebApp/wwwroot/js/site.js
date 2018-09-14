@@ -33,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
         getLocation(event.currentTarget);
         //save the timestamp when the user presses start
         startTime = Date.now();
+        //initialize variable to zero since the runner will not have previously stopped and resumed running
+        segmentElapsed = 0;
         //declare a variable that returns location every 5s and adds it to the route array
         routeActive = setInterval(getLocation, 5000)
         // run updatetimer every 1s as long as the timer isn't already running (if we click multiple times and don't have this conditional, it will start multiple loops that run every second, creating a bizarre, herky-jerky sped up timer)
@@ -56,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(runningTime);
         //save the timestamp from the moment the user presses stop
         stopTime = Date.now();
+        //save the elapsed time for the segment to a new variable so that if runner resumes we can re-initialize the start time then add the previous segment to their total elapsed time and avoid capturing time in between when they hit stop and when they resume
+        segmentElapsed = elapsed;
         //hide the stop button
         Stop.classList.add('hidden');
         //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to the pace calculator action
@@ -75,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         Resume.classList.add('hidden');
         Stop.classList.remove('hidden');
         Reset.classList.add('hidden');
+        //re-initialize startTime so that we do not capture any time while the runner is "stopped" and before they resume
+        startTime = Date.now();
         CalculatePace.classList.add('hidden');
         runningTime = setInterval(updateTimer, 1000);
         routeActive = setInterval(getLocation, 5000)
@@ -102,6 +108,7 @@ let route = [];
 let startTime = new Date();
 let stopTime = new Date();
 let elapsed = new Date();
+let segmentElapsed = new Date();
 let totalElapsedTime = stopTime - startTime;
 let distance;
 
@@ -135,7 +142,7 @@ const distanceDisplay = document.querySelector('h2#distance-covered');
 // function that locates the running time display, assigns the value of its .time property to the runningTime variable, then updates the display on an interval. this function also updates the distance display and updates it to hold the current distance traveled as caluculated by returnDistance function, which should run every time we add a new waypoint to our route (~ every 5 seconds) (and that value is truncated to two decimal places)
 function updateTimer() {
     const runningTimer = document.getElementById('runningTimer');
-    let elapsed = Date.now() - startTime;
+    elapsed = Date.now() - startTime + segmentElapsed;
     runningTimer.dataset.time = elapsed;
     runningTimer.innerText = displayTime(runningTimer.dataset.time);
     distance = returnDistance(route);
