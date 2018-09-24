@@ -10,12 +10,24 @@
     </header>
     <main id="content">
         <h2>Choose from one of the options below</h2>
-
-        <ul id="home-options">
-            <li><a asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a></li>
-            <li><a asp-action="GoalEntry" asp-controller="Goals">Goal Runs</a></li>
-            <li><a asp-action="ShowHistory" asp-controller="RunHistory">Your Run History</a></li>
-        </ul>
+        @*<div class="desktop">
+            <ul id="home-options">
+                <li><a asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a></li>
+                <li><a asp-action="ShowHistory" asp-controller="RunHistory">Your Run History</a></li>
+                <li><a asp-action="GoalEntry" asp-controller="Goals">Goal Runs</a></li>
+            </ul>
+        </div>
+        <div class="mobile">
+            <ul id="home-options">
+                <li><a asp-action="RunRecorder" asp-controller="Recorder">Run Recorder</a></li>
+                <li><a asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a></li>
+                <li><a asp-action="ShowHistory" asp-controller="RunHistory">Your Run History</a></li>
+            </ul>
+        </div>*@
+        <a class="home-options mobile" asp-action="RunRecorder" asp-controller="Recorder">Run Recorder</a>
+        <a class="home-options" asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a>
+        <a class="home-options" asp-action="ShowHistory" asp-controller="RunHistory">Your Run History</a>
+        <a class="home-options" asp-action="GoalEntry" asp-controller="Goals">Goal Calculator</a>
     </main>
     
 </div>
