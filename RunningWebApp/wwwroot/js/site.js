@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get the modal
     const modal = document.getElementById('recorder-warning');
     // Get the <span> element that closes the modal
-    const span = document.getElementsByClassName("close-modal")[0];
+    const span = document.getElementsByClassName("warning-close")[0];
     // Make modal appear
-    modal.style.display = "block";
+    modal.style.display = "grid";
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
+    span.onclick = function (event) {
         modal.style.display = "none";
     }
     // When the user clicks anywhere outside of the modal, close it
