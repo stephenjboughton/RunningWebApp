@@ -34,12 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('clickCounter value is ' + clickCounter);
         if (clickCounter >= 4) {
             enableDevelopmentTools();
+            clickCounter = 0
         }
     });
 
     // get the element that acts as a developmental messaging service
     messaging = document.getElementById('messaging');
     console.log(messaging);
+    // find the specific button on home page that has 'mobile' style applied and unhide it on desktop for debugging purposes
     runRecorder = document.querySelector('a.home-options.mobile');
     console.log(runRecorder);
 
@@ -182,6 +184,7 @@ function addWaypoint(position) {
     console.log(route);
 }
 
+// function that allows us to receive any error returned by navigator.gelocation.getCurrentPosition and throw it into the messaging element of the run recorder
 function debugError(error) {
     console.log(messaging.innerHTML);
     messaging.innerHTML = error.message;
@@ -302,6 +305,7 @@ Number.prototype.pad = function (size) {
     return s;
 }
 
+// handle quad click and enable development tools as appropriate (different views will have different elements available)
 function enableDevelopmentTools() {
     if (runRecorder) {
         runRecorder.classList.remove('mobile');
