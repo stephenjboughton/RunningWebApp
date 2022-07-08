@@ -25,6 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Code that runs when the DOM is loaded and verifies we have attached event handlers
     console.log('DOM Loaded');
 
+    // Get the element that we use for detecting quad-click that enables messaging for dev purposes
+    copyright = document.getElementById('copyright');
+    console.log(copyright);
+    // Attach an event handler for a click on the copyright element
+    copyright.addEventListener('click', (event) => {
+        clickCounter++;
+        console.log('clickCounter value is ' + clickCounter);
+        if (clickCounter >= 4) {
+            enableDevelopmentTools();
+        }
+    });
+
+    // get the element that acts as a developmental messaging service
+    messaging = document.getElementById('messaging');
+    console.log(messaging);
+    runRecorder = document.querySelector('a.home-options.mobile');
+    console.log(runRecorder);
+
     // Get the modal
     const modal = document.getElementById('recorder-warning');
     // Get the <span> element that closes the modal
@@ -45,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Locate the Start button
     const Start = document.querySelector('button#start');
     const CalculatePace = document.querySelector('button#submit-data');
+
     // Attach an event handler for a click on the button
     Start.addEventListener('click', (event) => {
         //console.log('Timer button added');    
@@ -64,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
         //unhide stop button
         Stop.classList.remove('hidden');
     });
+
+    
+
     //variables the locate and hold nodes for stop and reset buttons (both of which are hidden when page loads initially)
     const Stop = document.querySelector('button#stop');
     const Reset = document.querySelector('button#reset');
@@ -118,7 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Calculate Button added');
         
     });
+
 });
+
 //declare variable to hold the interval function that calls getLocation every 5s
 let routeActive;
 //declare array to hold each Location ping and variables startTime and stopTime for when user hits start and stop, then calculate elapsed time by subtracting start from stop
@@ -129,12 +153,20 @@ let elapsed = new Date();
 let segmentElapsed = new Date();
 let totalElapsedTime = stopTime - startTime;
 let distance;
+let copyright;
+let messaging;
+let runRecorderButton;
+let clickCounter = 0;
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(addWaypoint);
+        navigator.geolocation.getCurrentPosition(addWaypoint,debugError);
+
     } else {
         console.log('Geolocation is not supported by this browser.');
+        console.log(messaging.innerHTML);
+        messaging.innerHTML = 'Uh-oh...there seems to be a problem accessing your current location.  Please check your location services on both your device and for this browser. You may also want to make sure you are connected securely (via https).'
+        messaging.classList.remove('hidden');
     }
 }
 
@@ -146,7 +178,33 @@ function addWaypoint(position) {
     wayPoint.lon = position.coords.longitude;
     wayPoint.time = Date.now();
     route.push(wayPoint);
+    messaging.innerHTML = position.coords.latitude + ', ' + position.coords.longitude;
     console.log(route);
+}
+
+function debugError(error) {
+    console.log(messaging.innerHTML);
+    messaging.innerHTML = error.message;
+    messaging.classList.remove('hidden');
+
+    // TODO - Functionalize all or some of below so that we can reuse in methods here?
+    //stop the repeating interval that adds location to array every 10s
+    clearInterval(routeActive);
+    //stop the repeating interval that updates the timer display every second
+    clearInterval(runningTime);
+    //save the timestamp from the moment the user presses stop
+    stopTime = Date.now();
+    //save the elapsed time for the segment to a new variable so that if runner resumes we can re-initialize the start time then add the previous segment to their total elapsed time and avoid capturing time in between when they hit stop and when they resume
+    segmentElapsed = elapsed;
+    //hide the stop button
+    Stop.classList.add('hidden');
+    //call the function that assigns values from running timer and distance display to the appropriate form fields to submit to the pace calculator action
+    mapTimeDistanceDisplayToForm();
+    //show the reset button
+    Resume.classList.remove('hidden');
+    Reset.classList.remove('hidden');
+    //show the calculate pace button, which is a form submission button that takes the value-assigned fields in the form and submits them the pace calculator action
+    CalculatePace.classList.remove('hidden');
 }
 
 //variable used to access the timer that is running once we click start
@@ -244,31 +302,14 @@ Number.prototype.pad = function (size) {
     return s;
 }
 
+function enableDevelopmentTools() {
+    if (runRecorder) {
+        runRecorder.classList.remove('mobile');
+    }
 
-
-
-// Get the modal
-const modal = document.getElementById('myModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal 
-btn.onclick = function () {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if (messaging) {
+        console.log(messaging.innerHTML);
+        messaging.classList.remove('hidden');
     }
 }
+
