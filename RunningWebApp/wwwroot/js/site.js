@@ -145,10 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-//declare variable to hold the interval function that calls getLocation every 5s
+// declare variable to hold the interval function that calls getLocation every 5s
 let routeActive;
-//declare array to hold each Location ping and variables startTime and stopTime for when user hits start and stop, then calculate elapsed time by subtracting start from stop
+// declare array to hold each Location ping and variables startTime and stopTime for when user hits start and stop, then calculate elapsed time by subtracting start from stop
 let route = [];
+// array that will hold googleLatLong objects corresponding to each route waypoint that goes in route array which will be fed to google for distance
+let googleLatLongs = [];
 let startTime = new Date();
 let stopTime = new Date();
 let elapsed = new Date();
@@ -175,13 +177,16 @@ function getLocation() {
 //function that takes the user's current position and creates a waypoint object which includes properties to hold the lat and long and a timestamp and then adds each waypoint to an array, building the "route" that the user is running
 function addWaypoint(position) {
     let wayPoint = {};
-    let time;
     wayPoint.lat = position.coords.latitude;
     wayPoint.lon = position.coords.longitude;
     wayPoint.time = Date.now();
     route.push(wayPoint);
+    googleLatLongs.push(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
     messaging.innerHTML = position.coords.latitude + ', ' + position.coords.longitude;
-    console.log(route);
+
+    distance = returnDistance(route);
+    distanceDisplay.dataset.distance = distance;
+    distanceDisplay.innerText = distance.toFixed(2) + " mi";
 }
 
 // function that allows us to receive any error returned by navigator.gelocation.getCurrentPosition and throw it into the messaging element of the run recorder
@@ -224,9 +229,11 @@ function updateTimer() {
     elapsed = Date.now() - startTime + segmentElapsed;
     runningTimer.dataset.time = elapsed;
     runningTimer.innerText = displayTime(runningTimer.dataset.time);
-    distance = returnDistance(route);
-    distanceDisplay.dataset.distance = distance;
-    distanceDisplay.innerText = distance.toFixed(2) + " mi";
+    // TODO - don't handle distance here - handle it whwere we are handling getlocation because it does us no good to update distance every second if
+    // we are only updating location every 5! Time and Distance need to be handled in two separate function chains
+    //distance = returnDistance(route);
+    //distanceDisplay.dataset.distance = distance;
+    //distanceDisplay.innerText = distance.toFixed(2) + " mi";
 }
 
 //function that will reset the values of the timer
@@ -257,10 +264,10 @@ function mapTimeDistanceDisplayToForm() {
 //let googleLatLongs;
 //function that takes a route array and assigns the lat and lon values of each object in the route array to a google LatLong object, then feeds that array into google maps api compute length function to return the distance run.
 function returnDistance(route) {
-    let googleLatLongs = [];
-    for (let i = 0; i < route.length; i++) {
-        googleLatLongs.push(new google.maps.LatLng(route[i].lat, route[i].lon));
-    }
+    // TODO - What if we just create this array in a global scope and push a googleLatLong at the same time as a waypoint so that we aren't looping this array every time?    
+    //for (let i = 0; i < route.length; i++) {
+    //googleLatLongs.push(new google.maps.LatLng(route[i].lat, route[i].lon));
+    //}
     let runMeters = google.maps.geometry.spherical.computeLength(googleLatLongs);
     let runMiles = convertToMiles(runMeters);
     return runMiles;
