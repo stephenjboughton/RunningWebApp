@@ -12,11 +12,13 @@
 
     @if (ViewBag.KnownUser == false)
     {
-        <label asp-for="FName">First Name</label>
-        <input asp-for="FName" type="text" />
-        <label asp-for="LName">Last Name</label>
-        <input asp-for="LName" type="text" />
-    }    
+        <label asp-for="Runner.FName">First Name</label>
+        <input asp-for="Runner.FName" type="text" />
+        <label asp-for="Runner.LName">Last Name</label>
+        <input asp-for="Runner.LName" type="text" />
+        <label asp-for="Runner.EmailAddress">Email Address</label>
+        <input asp-for="Runner.EmailAddress" type="text" />
+    }
     <input type="hidden" asp-for="@Model.Distance" />
     <input type="hidden" asp-for="@Model.Hours" />
     <input type="hidden" asp-for="@Model.Minutes" />
