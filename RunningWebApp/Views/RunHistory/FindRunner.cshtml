@@ -1,4 +1,4 @@
-﻿@model RunData;
+﻿@model Runner;
 @{
     ViewData["Title"] = "FindRunner";
 }
@@ -13,6 +13,10 @@
     <div class="label-input">
         <label asp-for="LName">Last Name</label>
         <input asp-for="LName" type="text" />
+    </div>
+    <div class="label-input">
+        <label asp-for="EmailAddress">Email Address</label>
+        <input asp-for="EmailAddress" type="text" />
     </div>
     <div>
         <input type="submit" value="Get my history" />

@@ -91,7 +91,7 @@ namespace RunningWebApp.DAL
 			return runs;
 		}
 
-		public int GetUserID(string fname, string lname)
+		public int GetUserID(string fname, string lname, string emailAddress)
 		{
 			int runnerId;
 
@@ -101,10 +101,14 @@ namespace RunningWebApp.DAL
 				{
 					conn.Open();
 
-					string sqlS = $"SELECT id FROM runner WHERE fname = @fname AND lname = @lname;";
+					string firstName = "%" + fname + "%";
+					string lastName = "%" + lname + "%";
+
+					string sqlS = $"SELECT id FROM runner WHERE ((@fname is null and @lname is null) or (fname like @fname AND lname like @lname)) and ((@emailAddress is null) or (emailAddress = @emailAddress));";
 					SqlCommand cmdS = new SqlCommand(sqlS, conn);
-					cmdS.Parameters.AddWithValue("@fname", fname);
-					cmdS.Parameters.AddWithValue("@lname", lname);
+					cmdS.Parameters.AddWithValue("@fname", firstName ?? (object)DBNull.Value);
+					cmdS.Parameters.AddWithValue("@lname", lastName ?? (object)DBNull.Value);
+					cmdS.Parameters.AddWithValue("@emailAddress", emailAddress ?? (object)DBNull.Value);
 
 					runnerId = Convert.ToInt32(cmdS.ExecuteScalar());
 				}

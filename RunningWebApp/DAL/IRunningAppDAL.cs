@@ -12,6 +12,6 @@ namespace RunningWebApp.DAL
 
 		IList<PastRun> ShowHistory(int runnerId);
 
-		int GetUserID(string fname, string lname);
+		int GetUserID(string fname, string lname, string emailAddress);
     }
 }

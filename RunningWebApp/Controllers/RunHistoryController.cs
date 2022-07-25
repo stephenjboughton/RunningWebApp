@@ -42,7 +42,7 @@ namespace RunningWebApp.Controllers
 			//and use it to get runnerId
 			if (runnerId == 0)
 			{
-				runnerId = dal.GetUserID(runData.FName, runData.LName);
+				runnerId = dal.GetUserID(runData.Runner.FName, runData.Runner.LName, runData.Runner.EmailAddress);
 			}
 			//add the rundata to runner's history using their runnerId
 			dal.AddToHistory(runnerId, runData);
@@ -56,13 +56,13 @@ namespace RunningWebApp.Controllers
 			return RedirectToAction("ShowHistory", "RunHistory");
 		}
 
-		public IActionResult ShowHistory(string fName, string lName)
+		public IActionResult ShowHistory(string fName, string lName, string emailAddress)
 		{
 			int sessionId = HttpContext.Session.Get<int>(SessionKey);
 
-			if (fName != null && lName != null)
+			if ((fName != null && lName != null) || emailAddress != null)
 			{
-				sessionId = dal.GetUserID(fName, lName);
+				sessionId = dal.GetUserID(fName, lName, emailAddress);
 			}
 
 			if (sessionId == 0)
