@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RunningWebApp.DAL;
+using RunningWebApp.Providers.Auth;
 
 namespace RunningWebApp
 {
@@ -34,11 +35,16 @@ namespace RunningWebApp
 
 			services.AddDistributedMemoryCache();
 			services.AddSession();
+            services.AddCors();
 
-			string connectionString = Configuration["ConnectionStrings:default"];
-			services.AddTransient<IRunningAppDAL>(d => new RunHistoryDAL(connectionString));
+            string connectionString = Configuration["ConnectionStrings:default"];
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IRunningAppDAL>(d => new RunHistoryDAL(connectionString));
+            services.AddTransient<IAuthProvider, SessionAuthProvider>();
+            services.AddTransient<IUserDAL>(m => new UserSqlDAL(connectionString));
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +62,14 @@ namespace RunningWebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
             app.UseCookiePolicy();
 
 			app.UseSession();
@@ -66,6 +80,8 @@ namespace RunningWebApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            
         }
     }
 }

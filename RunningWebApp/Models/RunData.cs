@@ -7,7 +7,7 @@ namespace RunningWebApp.Models
 {
 	public class RunData
 	{
-		public Runner Runner { get; set; }
+		public User User { get; set; }
 
 		public double Distance { get; set; }
 
