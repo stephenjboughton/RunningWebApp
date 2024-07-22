@@ -49,18 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('recorder-warning');
     // Get the <span> element that closes the modal
     const span = document.getElementsByClassName("warning-close")[0];
-    // Make modal appear
-    modal.style.display = "grid";
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function (event) {
-        modal.style.display = "none";
-    }
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
+    if (modal) {
+        // Make modal appear
+        modal.style.display = "grid";
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function (event) {
             modal.style.display = "none";
         }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }  
     }
+
+    const runIdValueHolder = document.getElementById('runId');
+    console.log(runIdValueHolder.value);
 
     // Locate the Start button
     const Start = document.querySelector('button#start');
@@ -74,6 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
         startTime = Date.now();
         //initialize variable to zero since the runner will not have previously stopped and resumed running
         segmentElapsed = 0;
+
+        // since we are just starting, we should clear sessionStorage to avoid having data from any previous runs.
+        window.sessionStorage.clear();
+
         //declare a variable that returns location every 5s and adds it to the route array
         routeActive = setInterval(getLocation, 5000)
         // run updatetimer every 1s as long as the timer isn't already running (if we click multiple times and don't have this conditional, it will start multiple loops that run every second, creating a bizarre, herky-jerky sped up timer)
@@ -139,8 +148,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //locate the calculate pace button and use it to submit a form to calculate pace based on the run recorded
     CalculatePace.addEventListener('click', (event) => {
-        console.log('Calculate Button added');
+        console.log('Calculate Button clicked');
+
         
+
+        //postObj = {
+        //    wayPoints: "test",
+        //    googleLatLongs: "example"
+        //};
+
+        var postObj = new Object();
+        postObj.runId = runIdValueHolder.value;
+        postObj.WayPoints = route;
+
+        let post = JSON.stringify(postObj)
+
+        var domain = window.location.origin;
+        const url = domain + '/RunHistory/CaptureRouteData';
+        //let xhr = new XMLHttpRequest()
+
+        //xhr.open('POST', url, true)
+        //xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+        //xhr.send(post);
+
+        //xhr.onload = function () {
+        //    if (xhr.status === 201) {
+        //        console.log("Post successfully created!")
+        //    }
+        //}
+
+        var request = new XMLHttpRequest();
+
+        request.open('POST', url, true);
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        //request.setRequestHeader('Content-Length', post.length);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4 && request.status == 200) {
+                alert(request.responseText);
+            }
+        }
+        request.send(post);
     });
 
 });
@@ -157,6 +204,7 @@ let elapsed = new Date();
 let segmentElapsed = new Date();
 let totalElapsedTime = stopTime - startTime;
 let distance;
+let distanceIncremental = 0;
 let copyright;
 let messaging;
 let runRecorderButton;
@@ -177,17 +225,27 @@ function getLocation() {
 //function that takes the user's current position and creates a waypoint object which includes properties to hold the lat and long and a timestamp and then adds each waypoint to an array, building the "route" that the user is running
 function addWaypoint(position) {
     let wayPoint = {};
+    let gLatLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     wayPoint.lat = position.coords.latitude;
     wayPoint.lon = position.coords.longitude;
-    wayPoint.time = Date.now();
+    wayPoint.time = new Date().toJSON();
     route.push(wayPoint);
-    googleLatLongs.push(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-    messaging.innerHTML = position.coords.latitude + ', ' + position.coords.longitude;
+    googleLatLongs.push(gLatLong);
+    messaging.innerHTML = 'wayPoint #: ' + route.length + '; ' + position.coords.latitude + ", " + position.coords.longitude;
 
-    distance = returnDistance(route);
-    distanceDisplay.dataset.distance = distance;
-    distanceDisplay.innerText = distance.toFixed(2) + " mi";
+    // this will allow us to store a stringified version of the array of waypoints that make up our route, which we could potentially get and submit to an endpoint for further examination.
+    // but would we rather store the array of googleLatLongs so we can resubmit?  or both?
+    window.sessionStorage.setItem('route', JSON.stringify(route));
+    window.sessionStorage.setItem('googleRoute', JSON.stringify(googleLatLongs));
+
+    distance = returnDistance();
+    distanceDisplay1.dataset.distance = distance;
+    distanceDisplay1.innerText = distance.toFixed(2) + " mi";
+
+    distanceDisplay2.dataset.distance = distanceIncremental;
+    distanceDisplay2.innerText = distanceIncremental.toFixed(2) + " mi";
 }
+
 
 // function that allows us to receive any error returned by navigator.gelocation.getCurrentPosition and throw it into the messaging element of the run recorder
 function debugError(error) {
@@ -218,7 +276,8 @@ function debugError(error) {
 //variable used to access the timer that is running once we click start
 let runningTime;
 //variable used to access the distance display that lets the user know how far they have gone
-const distanceDisplay = document.querySelector('h2#distance-covered');
+const distanceDisplay1 = document.querySelector('h2#distance-from-array');
+const distanceDisplay2 = document.querySelector('h2#distance-incremental');
 
 
 /* WHAT IF WE REDECLARE THE START TIME ANY TIME WE HIT RESUME BUT STORE THE PREVIOUSLY ELAPSED TIME IN AN OFFSET VARIABLE AND ADD THAT TO THE TOTAL TIME AT THE END (OR AT THE TIME WE RESUME)*/
@@ -241,7 +300,7 @@ function clearTimer() {
     const runningTimer = document.getElementById('runningTimer');
     runningTimer.dataset.time = 0;
     runningTimer.innerText = "00:00:00";
-    distanceDisplay.innerText = "";
+    distanceDisplay1.innerText = "";
     //reset the value of the variable that holds our timer when we call setInterval (clearInterval just stops the execution, does not clear the accumulated value)
     runningTime = undefined;
     //document.querySelector('table#routeWP tbody').innerHTML = '<template id="wP"><tr><td class="demoLat"></td><td class="demoLon"></td><td class="wPTime"></td></tr></template>';
@@ -256,18 +315,21 @@ function mapTimeDistanceDisplayToForm() {
     const secondsToSubmit = document.querySelector('input#seconds-recorded');
     secondsToSubmit.setAttribute("value", calculateSeconds(runningTimer.dataset.time));
     const milesToSubmit = document.querySelector('input#distance-recorded');
-    milesToSubmit.setAttribute("value", distanceDisplay.dataset.distance);
+    milesToSubmit.setAttribute("value", distanceDisplay1.dataset.distance);
 }
 
 /* NEXT TO DO - refactor showPosition to use an array of objects, then add a timestamp to each waypoint - may need to order them later on because of asynchronous nature of js execution - somoe of them will return out of order possibly.  also, base total run time off timestamp from time of start  button click and timestamp from time of stop button click, not interval, and probably base display of timer off of timestamps too.*/
 
 //let googleLatLongs;
 //function that takes a route array and assigns the lat and lon values of each object in the route array to a google LatLong object, then feeds that array into google maps api compute length function to return the distance run.
-function returnDistance(route) {
-    // TODO - What if we just create this array in a global scope and push a googleLatLong at the same time as a waypoint so that we aren't looping this array every time?    
-    //for (let i = 0; i < route.length; i++) {
-    //googleLatLongs.push(new google.maps.LatLng(route[i].lat, route[i].lon));
-    //}
+function returnDistance() {
+    if (googleLatLongs.length >= 2) {
+        lastIndex = googleLatLongs.length - 1;
+        let lastSegmentMeters = google.maps.geometry.spherical.computeDistanceBetween(googleLatLongs[lastIndex - 1], googleLatLongs[lastIndex])
+        let lastSegmentMiles = convertToMiles(lastSegmentMeters)
+        distanceIncremental = distanceIncremental + lastSegmentMiles;
+    }
+
     let runMeters = google.maps.geometry.spherical.computeLength(googleLatLongs);
     let runMiles = convertToMiles(runMeters);
     return runMiles;

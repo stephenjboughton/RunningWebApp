@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RunningWebApp.DAL;
 using RunningWebApp.Providers.Auth;
 using RunningWebApp.Models;
+using Newtonsoft.Json;
 
 namespace RunningWebApp.Providers.Auth
 {
@@ -48,7 +49,8 @@ namespace RunningWebApp.Providers.Auth
             
             if (user != null && hashProvider.VerifyPasswordMatch(user.Password, password, user.Salt))
             {                
-                Session.SetString(SessionKey, user.Id.ToString());
+                //Session.SetString(SessionKey, user.Id.ToString());
+                Session.SetString(SessionKey, JsonConvert.SerializeObject(user));
                 return true;
             }
 

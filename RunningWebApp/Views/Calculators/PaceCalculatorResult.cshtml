@@ -23,6 +23,8 @@
     <input type="hidden" asp-for="@Model.Hours" />
     <input type="hidden" asp-for="@Model.Minutes" />
     <input type="hidden" asp-for="@Model.Seconds" />
+
+    <input class="hidden" id="runId" asp-for="Id" typeof="number" />
     <input type="submit" value="Add to History" />
 </form>
 <div class="return">

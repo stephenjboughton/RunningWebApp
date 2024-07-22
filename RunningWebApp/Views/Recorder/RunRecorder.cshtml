@@ -20,24 +20,58 @@
 
 <h1 id="runningTimer" data-time="0">00:00:00</h1>
 
-<h2 id="distance-covered" data-distance="0"></h2>
+<h2 id="distance-from-array" data-distance="0"></h2>
+
+<h2 id="distance-incremental" data-distance="0"></h2>
 
 <p id="messaging" class="hidden">Hi there, this is your messaging service.  Hopefully it will help you debug problems.</p>
 
 <form asp-controller="Calculators" asp-action="PaceCalculatorResult" method="get" novalidate>
     <label class="hidden" asp-for="Distance">Distance in miles</label>
     <input class="hidden" id="distance-recorded" asp-for="Distance" type="number" min="0" />
-    
+
     <label class="hidden" asp-for="Hours">Hours</label>
     <input class="hidden" id="hours-recorded" asp-for="Hours" type="number" />
-    
+
     <label class="hidden" asp-for="Minutes">Minutes</label>
     <input class="hidden" id="minutes-recorded" asp-for="Minutes" type="number" />
-    
+
     <label class="hidden" asp-for="Seconds">Seconds</label>
     <input class="hidden" id="seconds-recorded" asp-for="Seconds" type="number" />
-    
+
+    <input class="hidden" id="runId" asp-for="Id" typeof="number" />
+
     <button id="submit-data" class="hidden submit-button" type="submit">Caculate Pace</button>
 </form>
+
+    <!--<table class="table">-->
+        @*<thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RouteData.WayPoints[0].lat)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RouteData.WayPoints[0].lon)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.RouteData != null)
+            {
+                @foreach (var item in Model.RouteData.WayPoints)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.lat)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.lon)
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>*@
+    <!--</table>-->
 
 <script src="https://maps.googleapis.com/maps/api/js?key=&libraries=geometry"></script>
