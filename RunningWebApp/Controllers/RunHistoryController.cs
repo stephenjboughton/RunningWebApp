@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RunningWebApp.DAL;
 using RunningWebApp.Extensions;
@@ -15,9 +16,11 @@ namespace RunningWebApp.Controllers
 	public class RunHistoryController : Controller
 	{
 		private IRunningAppDAL dal;
-		public RunHistoryController(IRunningAppDAL dal)
+		private IConfiguration config;
+		public RunHistoryController(IRunningAppDAL dal, IConfiguration config)
 		{
 			this.dal = dal;
+			this.config = config;
 		}
 
 		//TODO add session feature for id - maybe call this action from somewhere different - upfront?
@@ -124,6 +127,10 @@ namespace RunningWebApp.Controllers
 		[HttpPost]
 		public ActionResult CaptureRouteData([FromBody] RouteData payload)
         {
+			//var configValue = config["UseWaypointLogging"];
+			var useWaypointLogging = bool.Parse(config["UseWaypointLogging"]);
+			if (!useWaypointLogging) return Ok();
+
 			DataTable dt = new DataTable();
 			//Add columns  
 			dt.Columns.Add(new DataColumn("RunId", typeof(int)));
