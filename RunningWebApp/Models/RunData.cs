@@ -7,7 +7,9 @@ namespace RunningWebApp.Models
 {
 	public class RunData
 	{
-		public Runner Runner { get; set; }
+		public int Id { get; set; }
+
+		public User User { get; set; }
 
 		public double Distance { get; set; }
 
@@ -17,7 +19,9 @@ namespace RunningWebApp.Models
 
 		public int Seconds { get; set; }
 
-		public int secondsPerMinute = 60;
+        public RouteData RouteData { get; private set; }
+
+        public int secondsPerMinute = 60;
 
 		public int secondsPerHour = 60 * 60;
 
@@ -37,7 +41,22 @@ namespace RunningWebApp.Models
 			}
 		}
 
-		public int[] PerMilePace()
+        public RunData(User user)
+        {
+            this.User = user;
+            this.Distance = 0;
+            this.Hours = 0;
+            this.Minutes = 0;
+            this.Seconds = 0;
+            this.RouteData = new RouteData();
+        }
+
+		public RunData()
+        {
+
+        }
+
+        public int[] PerMilePace()
 		{
 			
 			int minutesPerMile = AverageSeconds / secondsPerMinute;

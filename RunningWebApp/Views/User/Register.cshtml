@@ -1,0 +1,42 @@
+﻿@model RunningWebApp.Models.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+<body>
+    <div class="register-background-img">
+
+        <form class="login-container" asp-controller="User" asp-action="Register" method="post">
+            <h2 class="center-text">Register</h2>
+
+            <label asp-for="FName">FName</label>
+            <input asp-for="FName" />
+            <span asp-validation-for="FName"></span>
+            <br />
+
+            <label asp-for="LName">LName</label>
+            <input asp-for="LName" />
+            <span asp-validation-for="LName"></span>
+            <br />
+
+            <element class="error-message"><strong>@Html.ValidationMessage("username-taken")</strong></element>
+            <label asp-for="EmailAddress">Email</label>
+            <input asp-for="EmailAddress" />
+            <span asp-validation-for="EmailAddress"></span>
+            <br />
+
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+            <br />
+
+            <label asp-for="Password">Confirm Password</label>
+            <input asp-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword"></span>
+            <br />
+
+            <input class="button" type="submit" value="Register" />
+        </form>
+    </div>
+</body>

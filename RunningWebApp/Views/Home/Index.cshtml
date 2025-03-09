@@ -24,10 +24,18 @@
                 <li><a asp-action="ShowHistory" asp-controller="RunHistory">Your Run History</a></li>
             </ul>
         </div>*@
-        <a class="home-options mobile" asp-action="RunRecorder" asp-controller="Recorder">Run Recorder</a>
+
+        @if (ViewBag.AllowRunTrackingOnDesktop)
+        {
+            <a class="home-options" asp-action="RunRecorder" asp-controller="Recorder">Run Recorder</a>
+        }
+        else
+        {
+            <a class="home-options mobile" asp-action="RunRecorder" asp-controller="Recorder">Run Recorder</a>
+        }
         <a class="home-options" asp-action="PaceCalculator" asp-controller="Calculators">Pace Calculator</a>
         <a class="home-options" asp-action="ShowHistory" asp-controller="RunHistory">Your Run History</a>
         <a class="home-options" asp-action="GoalEntry" asp-controller="Goals">Goal Calculator</a>
     </main>
-    
-</div>
+
+        </div>

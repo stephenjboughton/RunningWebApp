@@ -1,0 +1,23 @@
+﻿@model RunningWebApp.Models.LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login";
+}
+<body>
+    <div class="login-background-img">
+        <form class="login-container" asp-controller="User" asp-action="Login" method="post">
+            <h2 class="center-text">Login</h2>
+
+            <element class="error-message"><strong>@Html.ValidationMessage("combo-not-correct")</strong></element>
+            <label asp-for="EmailAddress"></label>
+            <input asp-for="EmailAddress" />
+            <br />
+
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" />
+            <br />
+
+            <input class="button" type="submit" value="Submit">
+        </form>
+    </div>
+</body>
